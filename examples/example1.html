@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<script src="../src/ezeedb.js"></script>
+	</head>
+	<body>
+		Get Data
+		<div>
+			<input id="rg" type="text" name="resource_get" placeholder="Resource Name"></input>
+			<input id="findBy" type="text" name="name" placeholder="Filter By Name"></input>
+			<button onclick="getData()">Get Data</button>
+		</div>
+		Save Data
+		<div>
+			<input id="rs" type="text" name="resource_save" placeholder="Resource Name"></input>
+			<input id="data" type="text" name="data" placeholder="JSON Stringified"></input>
+			<button onclick="saveData()">Save Data</button>
+		</div>
+		<div id="target">
+		</div>
+		<script type="text/javascript">
+			//getData
+			function getData() {
+				var ezeedb = new EzeeDb(1);
+				var resource = document.getElementById('rg');
+				var findBy = document.getElementById('findBy').value;
+				if (!findBy) {
+					ezeedb.fetchAll(resource.value).then(function(data) {
+						document.getElementById('target').innerHTML = JSON.stringify(data);
+					});
+				} else {
+					ezeedb.findBy(resource.value, {'name': findBy}).then(function(data) {
+						document.getElementById('target').innerHTML = JSON.stringify(data);
+					});
+				}
+
+			}
+
+			//saveData
+			function saveData() {
+				var ezeedb = new EzeeDb(1);
+				var resource = document.getElementById('rs');
+				var data = JSON.parse(document.getElementById('data').value);
+				ezeedb.save(resource.value, data).then(function(data) {
+					console.log(data);
+				});
+			}
+		</script>
+	</body>
+</html>
